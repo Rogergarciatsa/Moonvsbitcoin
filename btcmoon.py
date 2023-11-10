@@ -11,6 +11,10 @@ import os
 
 #import matrix csv
 dataFrame = pd.read_csv(r'D:\Python\Moonvsbitcoin\HistoricalData\BitcoinHistoricalData.csv')
+
+# Convert the 'Date' column to a consistent format
+dataFrame['Date'] = pd.to_datetime(dataFrame['Date'], format='%m/%d/%Y').dt.strftime("%m/%d/%Y")
+
 #import date today
 datetoday = dt.datetime.today().strftime("%m/%d/%Y")
 
@@ -44,10 +48,13 @@ def calculate_moon_phase(date):
     ephem_date = ephem.Date(date)
     return ephem.Moon(ephem_date).phase
 
+#reset datetime format on dataframe
+df2['Date'] = pd.to_datetime(df2['Date'], format='%m/%d/%Y')
 
 
 # Apply the function to the 'Date' column and create a new 'Moon_Phase' column
-df2['Moon_Phase'] = df2['Date'].apply(lambda x: round(ephem.Moon(x).phase, 2))
+df2['Moon_Phase'] = df2['Date'].apply(lambda x: ephem.Moon(x).phase)
+
 print(df2)
 
 #calculating full moons
